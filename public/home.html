@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>College Timetable</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #6c5ce7, #00b894);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Sidebar with Back Button */
+    .sidebar {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.2);
+      padding: 12px 8px;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      transition: all 0.3s;
+      cursor: pointer;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .sidebar:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .sidebar span {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-weight: bold;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+
+    .page {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .neon-box {
+      width: 900px;
+      height: 420px;
+      display: flex;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      background: #fff;
+      transition: transform 0.3s;
+    }
+
+    .neon-box:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Left Panel */
+    .left-panel {
+      flex: 1;
+      padding: 40px;
+      background: linear-gradient(135deg, #1e88e5, #6c5ce7);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .left-panel h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .left-panel p {
+      margin-bottom: 25px;
+      font-size: 14px;
+      opacity: 0.85;
+    }
+
+    .left-panel a {
+      text-decoration: none;
+      text-align: center;
+      margin-bottom: 15px;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #1e88e5;
+      background: #ffffff;
+      transition: all 0.3s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .left-panel a:hover {
+      background: #f0f6ff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+
+    .left-panel a.secondary {
+      background: transparent;
+      color: #ffffff;
+      border: 2px solid #ffffff;
+    }
+
+    .left-panel a.secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Right Panel */
+    .right-panel {
+      flex: 1;
+      background: #f6f9ff;
+      color: #1e88e5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .right-panel h1 {
+      font-size: 48px;
+      margin-bottom: 15px;
+      color: #6c5ce7;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .right-panel span {
+      font-size: 16px;
+      color: #555;
+    }
+
+    /* Optional floating accent circle */
+    .right-panel::before {
+      content: '';
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, #6c5ce7, #00b894);
+      border-radius: 50%;
+      top: -40px;
+      right: -40px;
+      opacity: 0.2;
+    }
+
+    @media (max-width: 768px) {
+      .neon-box {
+        flex-direction: column;
+        width: 90%;
+        height: auto;
+      }
+
+      .left-panel, .right-panel {
+        width: 100%;
+        padding: 30px;
+      }
+
+      .right-panel::before {
+        display: none;
+      }
+
+      .sidebar {
+        left: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Back Button -->
+  <div class="sidebar" onclick="history.back()">
+    <span>BACK</span>
+  </div>
+
+  <div class="page">
+    <div class="neon-box">
+
+      <!-- Left Panel -->
+      <div class="left-panel">
+        <h2>College Timetable</h2>
+        
+        <a href="teacher.html">Teacher Panel</a>
+        <a href="student.html" class="secondary">See Your Schedule</a>
+      </div>
+
+      <div class="right-panel">
+        <h1>WELCOME</h1>
+        <span>Manage your academic time efficiently</span>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

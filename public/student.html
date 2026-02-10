@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Schedule - Student</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+<style>
+/* BODY & BACKGROUND */
+body {
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #6a5ce7, #00b894);
+  background-attachment: fixed;
+  color: #fff;
+}
+
+/* SIDEBAR BACK BUTTON */
+.sidebar {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.35);
+  padding: 12px 8px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  transition: all 0.3s;
+  cursor: pointer;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+  z-index: 100;
+}
+
+.sidebar:hover {
+  background: rgba(0,0,0,0.55);
+}
+
+.sidebar span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+/* NAVBAR */
+.navbar {
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  color: #fff;
+}
+
+/* NAVBAR BRAND */
+.navbar-brand {
+  font-weight: 700;
+}
+
+/* DAY BUTTONS */
+.day-btn {
+  transition: all 0.3s;
+}
+
+.day-btn.active {
+  background: #6a5ce7;
+  color: #fff !important;
+}
+
+.day-btn:hover {
+  background: #00b894;
+  color: #fff !important;
+}
+
+/* CARDS */
+.card {
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.9);
+  color: #000;
+}
+
+/* SLOT TITLES */
+.slot-title {
+  font-weight: 600;
+  color: #6a5ce7;
+}
+
+/* TABLES */
+table {
+  border-radius: 12px;
+  background: rgba(255,255,255,0.95);
+}
+
+table th, table td {
+  text-align: center;
+}
+
+/* NOTIFICATION BUTTON */
+#notifBtn {
+  transition: all 0.3s;
+}
+
+#notifBtn:hover {
+  background: #6a5ce7;
+  color: #fff;
+}
+
+/* NOTIFICATION LIST */
+#notifList .list-group-item {
+  background: rgba(255,255,255,0.9);
+  color: #000;
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+</style>
+</head>
+
+<body class="container p-4">
+
+<!-- Sidebar Back Button -->
+<div class="sidebar" onclick="history.back()">
+  <span>BACK</span>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark mb-4">
+  <div class="container-fluid">
+    <span class="navbar-brand">📚 Smart Schedule</span>
+
+    <div class="d-flex flex-wrap gap-1">
+      <button class="btn btn-light day-btn" data-day="Sunday">Sun</button>
+      <button class="btn btn-light day-btn active" data-day="Monday">Mon</button>
+      <button class="btn btn-light day-btn" data-day="Tuesday">Tue</button>
+      <button class="btn btn-light day-btn" data-day="Wednesday">Wed</button>
+      <button class="btn btn-light day-btn" data-day="Thursday">Thu</button>
+      <button class="btn btn-light day-btn" data-day="Friday">Fri</button>
+      <button class="btn btn-light day-btn" data-day="Saturday">Sat</button>
+
+      <!-- 🔔 NOTIFICATION BUTTON -->
+      <button class="btn btn-warning ms-2" id="notifBtn">
+        🔔 Notifications
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+
+  <!-- TIMETABLE SECTION -->
+  <div id="timetableSection">
+
+    <h3 id="dayTitle" class="mb-3">Monday Timetable</h3>
+
+    <!-- TIMETABLE CARD -->
+    <div class="card mb-4">
+      <div class="card-body" id="timetableBody"></div>
+    </div>
+
+  </div>
+
+  <!-- NOTIFICATION SECTION -->
+  <div id="notificationSection" style="display:none;">
+    <h3 class="mb-3">🔔 Notifications</h3>
+    <div class="card">
+      <ul class="list-group list-group-flush" id="notifList"></ul>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const socket = io();
+
+const timetableBody = document.getElementById("timetableBody");
+const dayTitle = document.getElementById("dayTitle");
+const notifList = document.getElementById("notifList");
+
+const timetableSection = document.getElementById("timetableSection");
+const notificationSection = document.getElementById("notificationSection");
+const notifBtn = document.getElementById("notifBtn");
+
+let lectures = [];
+let currentDay = "Monday";
+
+const slots = [
+  "09:00-10:00 ","10:00-11:00 ",
+  "11:00-12:00 ","12:00-01:00",
+  "01:00-02:00","02:00-03:00","03:00-04:00"
+];
+
+// 🔔 SHOW ONLY NOTIFICATIONS
+notifBtn.onclick = () => {
+  timetableSection.style.display = "none";
+  notificationSection.style.display = "block";
+};
+
+// DAY BUTTON CLICK → SHOW TIMETABLE
+document.querySelectorAll(".day-btn").forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll(".day-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+
+    currentDay = btn.dataset.day;
+
+    notificationSection.style.display = "none";
+    timetableSection.style.display = "block";
+
+    renderDay();
+  };
+});
+
+// LOAD LECTURES
+async function loadLectures(){
+  const res = await fetch("/timetable");
+  const data = await res.json();
+
+  lectures = [];
+  Object.keys(data).forEach(day=>{
+    Object.keys(data[day]).forEach(time=>{
+      lectures.push({day,time,lecture:data[day][time]});
+    });
+  });
+
+  renderDay();
+}
+
+// RENDER DAY
+function renderDay(){
+  dayTitle.textContent = currentDay + " Timetable";
+  timetableBody.innerHTML = "";
+
+  const groups = [
+    {title:"🕘 Morning Slot", range:[0,2]},
+    {title:"🕛 Middle Slot", range:[2,4]},
+    {title:"🕒 Afternoon Slot", range:[4,7]}
+  ];
+
+  groups.forEach(g=>{
+    const section = document.createElement("div");
+    section.innerHTML = `<p class="slot-title">${g.title}</p>`;
+
+    const table = document.createElement("table");
+    table.className = "table table-bordered mb-4";
+
+    let tbody = "";
+    slots.slice(g.range[0],g.range[1]).forEach(time=>{
+      const lec = lectures.find(l=>l.day===currentDay && l.time===time);
+      tbody += `<tr><td width="30%">${time}</td><td>${lec ? lec.lecture : "-"}</td></tr>`;
+    });
+
+    table.innerHTML = `
+      <thead class="table-light">
+        <tr>
+          <th width="30%">Time</th>
+          <th>Subject</th>
+        </tr>
+      </thead>
+      <tbody>${tbody}</tbody>
+    `;
+
+    section.appendChild(table);
+    timetableBody.appendChild(section);
+  });
+
+  // EXTRA LECTURES
+  const extraLectures = lectures.filter(
+    l => l.day === currentDay && !slots.includes(l.time)
+  );
+
+  if (extraLectures.length > 0) {
+    const extraSection = document.createElement("div");
+    extraSection.innerHTML = `<p class="slot-title">➕ Extra Lectures</p>`;
+
+    const table = document.createElement("table");
+    table.className = "table table-bordered";
+
+    let tbody = "";
+    extraLectures.forEach(l=>{
+      tbody += `
+        <tr class="table-warning">
+          <td width="30%">${l.time}</td>
+          <td>${l.lecture}</td>
+        </tr>`;
+    });
+
+    table.innerHTML = `
+      <thead class="table-light">
+        <tr>
+          <th width="30%">Time</th>
+          <th>Subject</th>
+        </tr>
+      </thead>
+      <tbody>${tbody}</tbody>
+    `;
+
+    extraSection.appendChild(table);
+    timetableBody.appendChild(extraSection);
+  }
+}
+
+// LOAD NOTIFICATIONS
+async function loadNotifications(){
+  const res = await fetch("/notifications");
+  const data = await res.json();
+
+  notifList.innerHTML = "";
+  data.reverse().forEach(n=>{
+    const li = document.createElement("li");
+    li.className = "list-group-item";
+    li.textContent = `[${n.type.toUpperCase()}] ${n.message}`;
+    notifList.appendChild(li);
+  });
+}
+
+// SOCKET NOTIFICATION
+socket.on("newNotification",({type,message})=>{
+  const li = document.createElement("li");
+  li.className = "list-group-item";
+  li.textContent = `[${type.toUpperCase()}] ${message}`;
+  notifList.prepend(li);
+});
+
+// INIT
+loadLectures();
+loadNotifications();
+</script>
+
+</body>
+</html>
