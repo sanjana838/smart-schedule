@@ -1,0 +1,503 @@
+First.css
+/* First.css - Smart Time Table Management System - Blue Light Theme */
+
+/* Import a beautiful font */
+
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Main container with gradient background */
+.main-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(135deg, 
+    #e6f2ff 0%, 
+    #d6e8ff 25%, 
+    #c2dfff 50%, 
+    #a8d4ff 75%, 
+    #8bc5ff 100%);
+  animation: gradientShift 18s ease infinite;
+  background-size: 300% 300%;
+}
+
+/* Animated gradient background */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Overlay with subtle pattern */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 15% 25%, rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+    radial-gradient(circle at 85% 75%, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.8;
+  z-index: 1;
+}
+
+/* Content container */
+.content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+  padding: 50px;
+  background-color: rgba(255, 255, 255, 0.92);
+  border-radius: 28px;
+  box-shadow: 
+    0 25px 70px rgba(33, 150, 243, 0.25),
+    0 10px 30px rgba(33, 150, 243, 0.15),
+    0 5px 15px rgba(33, 150, 243, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  animation: fadeInUp 1s ease-out;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* Decorative elements inside content */
+.content::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(33, 150, 243, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.content::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  right: -100px;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(3, 169, 244, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+/* Project title */
+.project-title {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #1565c0;
+  text-shadow: 2px 2px 4px rgba(21, 101, 192, 0.1);
+  letter-spacing: -0.5px;
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(to right, #0d47a1, #1976d2, #2196f3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: titleShine 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleShine {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.project-title span {
+  display: block;
+  font-size: 3.2rem;
+  margin-top: 5px;
+  color: #0d47a1;
+  background: linear-gradient(to right, #0d47a1, #1976d2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Title underline effect */
+.project-title::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 5px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    #2196f3, 
+    #64b5f6, 
+    #2196f3, 
+    transparent);
+  border-radius: 3px;
+  box-shadow: 0 3px 10px rgba(33, 150, 243, 0.3);
+}
+
+/* Subtitle */
+.subtitle {
+  font-size: 1.6rem;
+  color: #0d47a1;
+  margin: 50px 0 60px;
+  font-weight: 500;
+  position: relative;
+  padding: 20px 0;
+  letter-spacing: 1.5px;
+  font-family: 'Poppins', sans-serif;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.subtitle::before, .subtitle::after {
+  content: '✦';
+  position: absolute;
+  color: #2196f3;
+  font-size: 1.5rem;
+  text-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+  animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.subtitle::before {
+  left: 0;
+  top: 0;
+}
+
+.subtitle::after {
+  right: 0;
+  bottom: 0;
+}
+
+/* Button container */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 3;
+}
+
+/* Button styles */
+.btn {
+  padding: 22px 45px;
+  font-size: 1.35rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-family: 'Montserrat', sans-serif;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  min-width: 240px;
+  box-shadow: 
+    0 12px 25px rgba(33, 150, 243, 0.2),
+    0 8px 15px rgba(33, 150, 243, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.6), 
+    transparent);
+  transition: left 0.8s ease;
+  z-index: -1;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:hover {
+  transform: translateY(-12px) scale(1.05);
+  box-shadow: 
+    0 20px 40px rgba(33, 150, 243, 0.3),
+    0 15px 25px rgba(33, 150, 243, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.btn:active {
+  transform: translateY(-6px) scale(1.02);
+}
+
+/* Admin button */
+.admin-btn {
+  background: linear-gradient(145deg, #1976d2, #0d47a1);
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.admin-btn:hover {
+  background: linear-gradient(145deg, #1565c0, #0d3c82);
+  box-shadow: 
+    0 20px 40px rgba(13, 71, 161, 0.35),
+    0 15px 25px rgba(13, 71, 161, 0.25);
+}
+
+/* Timetable button */
+.timetable-btn {
+  background: linear-gradient(145deg, #2196f3, #1976d2);
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.timetable-btn:hover {
+  background: linear-gradient(145deg, #1976d2, #1565c0);
+  box-shadow: 
+    0 20px 40px rgba(33, 150, 243, 0.35),
+    0 15px 25px rgba(33, 150, 243, 0.25);
+}
+
+/* Button icons */
+.btn::after {
+  margin-left: 12px;
+  font-size: 1.5rem;
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.2));
+}
+
+/* Floating decorative elements */
+.floating-elem {
+  position: absolute;
+  z-index: 1;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.floating-elem:nth-child(1) {
+  top: 10%;
+  left: 8%;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(100, 181, 246, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: floatUpDown 9s ease-in-out infinite;
+  box-shadow: 0 0 30px rgba(100, 181, 246, 0.4);
+}
+
+.floating-elem:nth-child(2) {
+  top: 75%;
+  right: 10%;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(33, 150, 243, 0.3) 0%, transparent 70%);
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  animation: floatUpDown 12s ease-in-out infinite reverse;
+  box-shadow: 0 0 40px rgba(33, 150, 243, 0.4);
+}
+
+.floating-elem:nth-child(3) {
+  bottom: 20%;
+  left: 15%;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, rgba(3, 169, 244, 0.3) 0%, transparent 70%);
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  animation: floatUpDown 15s ease-in-out infinite;
+  box-shadow: 0 0 25px rgba(3, 169, 244, 0.4);
+}
+
+.floating-elem:nth-child(4) {
+  top: 30%;
+  right: 15%;
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, rgba(30, 136, 229, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: floatUpDown 11s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(30, 136, 229, 0.4);
+}
+
+@keyframes floatUpDown {
+  0%, 100% { 
+    transform: translateY(0) rotate(0deg) scale(1); 
+  }
+  50% { 
+    transform: translateY(-40px) rotate(180deg) scale(1.1); 
+  }
+}
+
+/* Animation for content */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) rotateX(10deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+
+/* Sparkle effects */
+@keyframes sparkle {
+  0%, 100% { 
+    opacity: 0; 
+    transform: scale(0.5) rotate(0deg);
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.2) rotate(180deg);
+  }
+}
+
+.sparkle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #bbdefb;
+  border-radius: 50%;
+  box-shadow: 0 0 15px 3px #bbdefb;
+  animation: sparkle 2.5s infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Responsive design */
+@media (max-width: 992px) {
+  .content {
+    max-width: 90%;
+    padding: 40px 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    margin: 20px;
+    padding: 35px 25px;
+    border-radius: 24px;
+  }
+  
+  .project-title {
+    font-size: 3rem;
+  }
+  
+  .project-title span {
+    font-size: 2.5rem;
+  }
+  
+  .subtitle {
+    font-size: 1.3rem;
+    margin: 40px 0 50px;
+    letter-spacing: 1px;
+  }
+  
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+  
+  .btn {
+    width: 100%;
+    max-width: 320px;
+    padding: 20px 35px;
+    font-size: 1.25rem;
+  }
+  
+  .floating-elem {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-title {
+    font-size: 2.5rem;
+  }
+  
+  .project-title span {
+    font-size: 2rem;
+  }
+  
+  .subtitle {
+    font-size: 1.1rem;
+    margin: 30px 0 40px;
+  }
+  
+  .btn {
+    padding: 18px 30px;
+    font-size: 1.1rem;
+    min-width: auto;
+  }
+}
+
+/* Academic Calendar button - Light Blue Theme */
+.academic-btn {
+  background: linear-gradient(145deg, #64b5f6, #42a5f5);
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.academic-btn:hover {
+  background: linear-gradient(145deg, #42a5f5, #1e88e5);
+  box-shadow: 
+    0 20px 40px rgba(66, 165, 245, 0.35),
+    0 15px 25px rgba(66, 165, 245, 0.25);
+}
+
+
+/* Time table calendar icon animation */
+.calendar-icon {
+  display: inline-block;
+  animation: calendarPulse 3s infinite;
+}
+
+@keyframes calendarPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Bottom wave decoration */
+.wave-decoration {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  z-index: 1;
+}
+
+.wave-decoration svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 80px;
+}
+
+.wave-decoration .shape-fill {
+  fill: rgba(33, 150, 243, 0.15);
+}

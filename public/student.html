@@ -186,24 +186,24 @@ const notifBtn = document.getElementById("notifBtn");
 let lectures = [];
 let currentDay = "Monday";
 
+// Standard slots
 const slots = [
-  "09:00-10:00 ","10:00-11:00 ",
-  "11:00-12:00 ","12:00-01:00",
+  "09:00-10:00","10:00-11:00",
+  "11:00-12:00","12:00-01:00",
   "01:00-02:00","02:00-03:00","03:00-04:00"
 ];
 
-// 🔔 SHOW ONLY NOTIFICATIONS
+// 🔔 Show notifications
 notifBtn.onclick = () => {
   timetableSection.style.display = "none";
   notificationSection.style.display = "block";
 };
 
-// DAY BUTTON CLICK → SHOW TIMETABLE
+// Day buttons click
 document.querySelectorAll(".day-btn").forEach(btn=>{
-  btn.onclick = ()=>{
+  btn.onclick = () => {
     document.querySelectorAll(".day-btn").forEach(b=>b.classList.remove("active"));
     btn.classList.add("active");
-
     currentDay = btn.dataset.day;
 
     notificationSection.style.display = "none";
@@ -213,7 +213,7 @@ document.querySelectorAll(".day-btn").forEach(btn=>{
   };
 });
 
-// LOAD LECTURES
+// Load lectures from server
 async function loadLectures(){
   const res = await fetch("/timetable");
   const data = await res.json();
@@ -221,14 +221,14 @@ async function loadLectures(){
   lectures = [];
   Object.keys(data).forEach(day=>{
     Object.keys(data[day]).forEach(time=>{
-      lectures.push({day,time,lecture:data[day][time]});
+      lectures.push({ day, time, lecture: data[day][time] });
     });
   });
 
   renderDay();
 }
 
-// RENDER DAY
+// Render timetable for current day
 function renderDay(){
   dayTitle.textContent = currentDay + " Timetable";
   timetableBody.innerHTML = "";
@@ -266,7 +266,7 @@ function renderDay(){
     timetableBody.appendChild(section);
   });
 
-  // EXTRA LECTURES
+  // Extra lectures (custom times)
   const extraLectures = lectures.filter(
     l => l.day === currentDay && !slots.includes(l.time)
   );
@@ -284,7 +284,8 @@ function renderDay(){
         <tr class="table-warning">
           <td width="30%">${l.time}</td>
           <td>${l.lecture}</td>
-        </tr>`;
+        </tr>
+      `;
     });
 
     table.innerHTML = `
@@ -302,13 +303,13 @@ function renderDay(){
   }
 }
 
-// LOAD NOTIFICATIONS
+// Load notifications
 async function loadNotifications(){
   const res = await fetch("/notifications");
   const data = await res.json();
 
   notifList.innerHTML = "";
-  data.reverse().forEach(n=>{
+  data.forEach(n=>{
     const li = document.createElement("li");
     li.className = "list-group-item";
     li.textContent = `[${n.type.toUpperCase()}] ${n.message}`;
@@ -316,8 +317,23 @@ async function loadNotifications(){
   });
 }
 
-// SOCKET NOTIFICATION
-socket.on("newNotification",({type,message})=>{
+// SOCKET: New lecture added or deleted
+socket.on("scheduleUpdate", ({ day, time, lecture })=>{
+  const idx = lectures.findIndex(l=>l.day===day && l.time===time);
+  if (lecture) {
+    // add or update lecture
+    if (idx >= 0) lectures[idx].lecture = lecture;
+    else lectures.push({ day, time, lecture });
+  } else {
+    // delete lecture
+    if (idx >= 0) lectures.splice(idx,1);
+  }
+
+  if (day === currentDay) renderDay();
+});
+
+// SOCKET: New notification
+socket.on("newNotification", ({ type, message })=>{
   const li = document.createElement("li");
   li.className = "list-group-item";
   li.textContent = `[${type.toUpperCase()}] ${message}`;
@@ -328,6 +344,3 @@ socket.on("newNotification",({type,message})=>{
 loadLectures();
 loadNotifications();
 </script>
-
-</body>
-</html>

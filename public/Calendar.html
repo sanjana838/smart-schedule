@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Academic Calendar 2026</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+}
+
+.calendar-container {
+    width: 90%;
+    max-width: 900px;
+    margin: 30px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header button {
+    padding: 6px 12px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.calendar-header button:hover {
+    background-color: #0056b3;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.day-name {
+    font-weight: bold;
+    text-align: center;
+    padding: 8px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+}
+
+.date {
+    min-height: 90px;
+    padding: 5px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.date:hover {
+    background-color: #dee2e6;
+}
+
+.event {
+    font-size: 11px;
+    background-color: #28a745;
+    color: white;
+    padding: 2px 4px;
+    border-radius: 3px;
+    margin-top: 3px;
+    display: block;
+}
+
+
+
+
+</style>
+</head>
+
+<body>
+
+<div class="calendar-container">
+    <div class="calendar-header">
+        <button onclick="prevMonth()">Previous</button>
+        <h2 id="monthYear"></h2>
+        <button onclick="nextMonth()">Next</button>
+    </div>
+
+    <div class="calendar" id="calendar"></div>
+</div>
+
+<script>
+
+// Academic Events
+const academicEvents = [
+  { date: "2026-01-01", title: "Commencement of Semester & Teaching – Learning" },
+  { date: "2026-01-12", title: "Registration for VAP" },
+  { date: "2026-02-03", title: "Month 1 Attendance Display" },
+  { date: "2026-02-06", title: "Review – Seminar / Project" },
+  { date: "2026-02-16", title: "Unit Test-I Exam" },
+  { date: "2026-02-23", title: "SPPU In-Sem Examination" },
+  { date: "2026-03-06", title: "Mid Semester Submission" },
+  { date: "2026-03-20", title: "Parents & Alumni Meet" },
+  { date: "2026-03-30", title: "NCCC-2026 Conference" },
+  { date: "2026-04-24", title: "End of Teaching" },
+  { date: "2026-04-27", title: "Prelim Theory Examination" },
+  { date: "2026-05-08", title: "Prelim Exam Result" },
+  { date: "2026-05-19", title: "Conclusion of Semester" },
+  { date: "2026-05-20", title: "University Practical Exam" }
+];
+
+let currentDate = new Date();
+
+function renderCalendar() {
+    const calendar = document.getElementById("calendar");
+    const monthYear = document.getElementById("monthYear");
+
+    calendar.innerHTML = "";
+
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    monthYear.innerText = currentDate.toLocaleString("default", {
+        month: "long",
+        year: "numeric"
+    });
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const lastDate = new Date(year, month + 1, 0).getDate();
+
+    const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+    // Day Names
+    days.forEach(day => {
+        const dayDiv = document.createElement("div");
+        dayDiv.className = "day-name";
+        dayDiv.innerText = day;
+        calendar.appendChild(dayDiv);
+    });
+
+    // Empty spaces
+    for (let i = 0; i < firstDay; i++) {
+        calendar.appendChild(document.createElement("div"));
+    }
+
+    // Dates
+    for (let day = 1; day <= lastDate; day++) {
+
+        const fullDate = `${year}-${String(month + 1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+        const dateDiv = document.createElement("div");
+        dateDiv.className = "date";
+        dateDiv.innerHTML = `<strong>${day}</strong>`;
+
+        const events = academicEvents.filter(e => e.date === fullDate);
+
+        events.forEach(e => {
+            const eventDiv = document.createElement("div");
+            eventDiv.className = "event";
+            eventDiv.innerText = e.title;
+            dateDiv.appendChild(eventDiv);
+        });
+
+        calendar.appendChild(dateDiv);
+    }
+}
+
+function prevMonth() {
+    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+    renderCalendar();
+}
+
+function nextMonth() {
+    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+    renderCalendar();
+}
+
+// Initial render
+renderCalendar();
+
+</script>
+
+</body>
+</html>
